@@ -110,5 +110,6 @@
 	<classpathentry kind="lib" path="lib/jung/jung-io-2.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/jung/jung-jai-2.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/jung/jung-jai-samples-2.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/stanford-postagger-2012-01-06.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
