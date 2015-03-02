@@ -302,6 +302,7 @@ public class SbConstants {
 		BT_NEW("BtNew"),
 		BT_COPY("BtCopy"),
 		BT_DELETE("BtDelete"),
+		BT_IMPORT("BtImport"),
 		BT_ADD_OR_UPDATE("BtUpdate"),
 		BT_OK("BtOk"),
 		BT_CANCEL("BtCancel"),
