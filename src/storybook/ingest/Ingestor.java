@@ -17,4 +17,12 @@ public interface Ingestor {
 	 */
 	public String getContent();
 
+	/**
+	 * For use with larger files such as full books, this is used to digest them piece by piece
+	 * so as to prevent there from being a large memory impact.
+	 * @param div
+	 * @param size
+	 * @return
+	 */
+	public String getContentPieceByPiece(int iteration, int numLines);
 }

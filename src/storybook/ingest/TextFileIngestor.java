@@ -43,17 +43,43 @@ public class TextFileIngestor implements Ingestor {
 
 	@Override
 	public String getContent() {
+		return getContentPieceByPiece(-1,-1);
+	}
+
+	@Override
+	public String getContentPieceByPiece(int iteration, int numLines) {
 		// this will store the file contents
 		String contents = "";
 
 		// Perform the read-in from the file
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(file));
-			String nextLine = reader.readLine();
+			String nextLine = "";
 
-			while (nextLine != null) {
-				contents += nextLine + "\n";
+			//if we're just grabbing a pice, grab it piece by piece
+			if (numLines > 0 && iteration >= 0) {
+				for (int i = 0; i<iteration*numLines; i++){
+					reader.readLine();
+				}
 				nextLine = reader.readLine();
+				
+				//the double conditional of the j and while ensures that we stop at either end of file
+				//or at the number of lines we're supposed to take, whatever occurs first.
+				int j = 0;
+				while (nextLine != null){
+					if (j > numLines)
+						break;
+					contents += nextLine +"\n";
+					nextLine = reader.readLine();
+				}
+				
+			//if either one of the above is -1, grab everything
+			} else {
+				nextLine = reader.readLine();
+				while (nextLine != null) {
+					contents += nextLine + "\n";
+					nextLine = reader.readLine();
+				}
 			}
 			reader.close();
 
@@ -66,9 +92,7 @@ public class TextFileIngestor implements Ingestor {
 			;
 			e.printStackTrace();
 		}
-
-		// contents should now have the file contents
-		// split it on spaces and return it to the calling method
+		
 		return contents;
 	}
 

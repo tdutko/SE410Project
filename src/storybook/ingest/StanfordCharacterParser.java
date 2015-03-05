@@ -203,10 +203,11 @@ public class StanfordCharacterParser implements Parser {
 					}
 				}
 			}
-			
-			for (String singleName : strictMap.get(1)) {
-				if (!alreadyPresent(culledList, singleName)) {
-					culledList.add(singleName);
+			if (strictMap.containsKey(1)) {
+				for (String singleName : strictMap.get(1)) {
+					if (!alreadyPresent(culledList, singleName)) {
+						culledList.add(singleName);
+					}
 				}
 			}
 			return culledList;
