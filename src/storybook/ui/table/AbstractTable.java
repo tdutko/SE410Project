@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Timestamp;
@@ -21,6 +22,7 @@ import javax.swing.DefaultRowSorter;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -40,6 +42,7 @@ import org.hibernate.Session;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 import org.jdesktop.swingx.table.TableColumnExt;
+
 import storybook.SbConstants;
 import storybook.SbConstants.ActionCommand;
 import storybook.SbConstants.ClientPropertyName;
@@ -93,10 +96,14 @@ public abstract class AbstractTable extends AbstractPanel implements ActionListe
 	private JButton btImport;
 	private IconButton btOrderUp;
 	private IconButton btOrderDown;
+	private JFileChooser fileChooser;
 
 	public AbstractTable(MainFrame mainFrame) {
 		this.mainFrame = mainFrame;
 		ctrl = mainFrame.getBookController();
+		fileChooser = new JFileChooser();
+		fileChooser.setApproveButtonText("Import");
+		fileChooser.setDialogTitle("Import");
 	}
 
 	abstract protected AbstractEntity getNewEntity();
@@ -485,6 +492,7 @@ public abstract class AbstractTable extends AbstractPanel implements ActionListe
 		Component comp = (Component) e.getSource();
 		String compName = comp.getName();
 		int row = table.getSelectedRow();
+		File f = null;
 		SbApp.trace("actCmd=" + actCmd + ",comp="+compName + ",row="+row);
 		if (ComponentName.BT_EDIT.check(compName) || ActionCommand.EDIT.check(actCmd)) {
 			sendSetEntityToEdit(row);
@@ -527,6 +535,17 @@ public abstract class AbstractTable extends AbstractPanel implements ActionListe
 				sendDeleteEntities(rows);
 				return;
 			}
+		}
+		// Add action performed for the import button
+		if(ComponentName.BT_IMPORT.check(compName) || ActionCommand.IMPORT.check(actCmd)){
+			//open the dialog
+			int returnVal = fileChooser.showOpenDialog(this);
+			// get the file path 
+			
+			if(returnVal == JFileChooser.APPROVE_OPTION){
+				f = fileChooser.getSelectedFile();
+			}
+			//TODO: send it to the book controller
 		}
 
 		if (ComponentName.BT_ORDER_UP.check(compName)) {

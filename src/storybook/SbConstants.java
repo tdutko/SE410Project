@@ -351,7 +351,8 @@ public class SbConstants {
 		EDIT("Edit"),
 		NEW("New"),
 		COPY("Copy"),
-		DELETE("Delete");
+		DELETE("Delete"),
+		IMPORT("Import");
 		final private String text;
 		private ActionCommand(String text) {
 			this.text = text;
