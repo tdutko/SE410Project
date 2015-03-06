@@ -1,10 +1,12 @@
 package storybook.ingest;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 import edu.stanford.nlp.ie.AbstractSequenceClassifier;
 import edu.stanford.nlp.ie.crf.CRFClassifier;
@@ -34,7 +36,7 @@ public class StanfordCharacterParser implements Parser {
 		MINIMAL, FIRSTLAST, STRICT
 	};
 
-	private String words;
+	private InputStream is;
 	private Strictness strictness;
 
 	/**
@@ -43,8 +45,8 @@ public class StanfordCharacterParser implements Parser {
 	 * @param s
 	 *            the content string
 	 */
-	public StanfordCharacterParser(String s) {
-		words = s;
+	public StanfordCharacterParser(InputStream in) {
+		is = in;
 		strictness = Strictness.MINIMAL;
 	}
 
@@ -55,8 +57,8 @@ public class StanfordCharacterParser implements Parser {
 	 * @param s
 	 * @param strict
 	 */
-	public StanfordCharacterParser(String s, Strictness strict) {
-		words = s;
+	public StanfordCharacterParser(InputStream in, Strictness strict) {
+		is = in;
 		strictness = strict;
 	}
 
@@ -71,74 +73,92 @@ public class StanfordCharacterParser implements Parser {
 			e.printStackTrace();
 		}
 
-		// tag everything
-		List<List<CoreLabel>> out = classifier.classify(words);
+		
 
 		// initialize the list of names to return
 		List<String> names = new ArrayList<String>();
 
-		// loop over the tags and pull out just the relevant ones
-		// try to pair up first and last names if possible
-		for (int i = 0; i < out.size(); i++) {
-			List<CoreLabel> sentence = out.get(i);
+		Scanner scanner = new Scanner(is);
+		String nextLine = scanner.nextLine();
+		
+		while (nextLine != null) {
+			// tag everything
+			List<List<CoreLabel>> out = classifier.classify(nextLine);
 
-			int lastFound = -1; // used for pairing up first + last names
-			String nameString = ""; // used to store the first+last name pairs.
-			for (int j = 0; j < sentence.size(); j++) {
-				CoreLabel word = sentence.get(j);
+			// loop over the tags and pull out just the relevant ones
+			// try to pair up first and last names if possible
+			for (int i = 0; i < out.size(); i++) {
+				List<CoreLabel> sentence = out.get(i);
 
-				// if it is tagged as "PERSON"...
-				if (word.getString(CoreAnnotations.AnswerAnnotation.class)
-						.equals("PERSON")) {
+				int lastFound = -1; // used for pairing up first + last names
+				String nameString = ""; // used to store the first+last name
+										// pairs.
+				for (int j = 0; j < sentence.size(); j++) {
+					CoreLabel word = sentence.get(j);
 
-					// check to see the coordinate of the previously found name
-					// if we've already found one in this sentence...
-					if (lastFound != -1) {
+					// if it is tagged as "PERSON"...
+					if (word.getString(CoreAnnotations.AnswerAnnotation.class)
+							.equals("PERSON")) {
 
-						// if the previous name was directly prior, it's
-						// probably combined with this name (should catch middle
-						// names too)
-						// NOTE: Stanford separates out punctuation from words,
-						// so this should NOT catch sentences that end then
-						// start with names.
-						if (lastFound == j - 1) {
+						// check to see the coordinate of the previously found
+						// name
+						// if we've already found one in this sentence...
+						if (lastFound != -1) {
 
-							// just add a space then the current name, as they
-							// likely belong to the same individual
-							nameString += " " + word.word();
+							// if the previous name was directly prior, it's
+							// probably combined with this name (should catch
+							// middle
+							// names too)
+							// NOTE: Stanford separates out punctuation from
+							// words,
+							// so this should NOT catch sentences that end then
+							// start with names.
+							if (lastFound == j - 1) {
 
-							// the previous name was not directly prior, it
-							// likely does not belong to the same individual,
-							// and should be separated from them.
+								// just add a space then the current name, as
+								// they
+								// likely belong to the same individual
+								nameString += " " + word.word();
+
+								// the previous name was not directly prior, it
+								// likely does not belong to the same
+								// individual,
+								// and should be separated from them.
+							} else {
+								nameString += ";" + word.word();
+							}
+
+							// if we haven't found another name this sentence...
 						} else {
-							nameString += ";" + word.word();
+
+							// if the nameString is empty, start it up
+							if (nameString.equals("")) {
+								nameString += word.word();
+
+								// otherwise, append a separtor to the string,
+								// then
+								// add the new name.
+							} else {
+								nameString += ";" + word.word();
+							}
 						}
-
-						// if we haven't found another name this sentence...
-					} else {
-
-						// if the nameString is empty, start it up
-						if (nameString.equals("")) {
-							nameString += word.word();
-
-							// otherwise, append a separtor to the string, then
-							// add the new name.
-						} else {
-							nameString += ";" + word.word();
-						}
+						lastFound = j;
 					}
-					lastFound = j;
+				}
+
+				if (!nameString.equals("")) {
+					String[] nameArray = nameString.split(";");
+					for (String name : nameArray) {
+						names.add(name);
+					}
 				}
 			}
-
-			if (!nameString.equals("")) {
-				String[] nameArray = nameString.split(";");
-				for (String name : nameArray) {
-					names.add(name);
-				}
-			}
-		}
-
+			if (scanner.hasNext())
+				nextLine = scanner.nextLine();
+			else 
+				break;
+		}		
+		scanner.close();
 		return removeDuplicates(names);
 	}
 
@@ -285,50 +305,4 @@ public class StanfordCharacterParser implements Parser {
 
 		return false;
 	}
-
-	/* Test Main method TODO remove this
-	public static void main(String args[]) {
-		String sourcePath = "C:/Users/Mordio/Desktop/test.txt";
-		Ingestor ing = new TextFileIngestor(sourcePath);
-		String testString = ing.getContent();
-		
-		System.out.println("Testing Parser using the statement:\n"+testString+"\n\n");
-
-		System.out.println("MINIMAL Strictness: ");
-		{
-			StanfordCharacterParser scp = new StanfordCharacterParser(
-					testString, Strictness.MINIMAL);
-
-			List<String> names = scp.getTokens();
-
-			for (String s : names) {
-				System.out.println(s + " is a name.");
-			}
-		}
-		
-		System.out.println("\nFIRSTLAST Strictness: ");
-		{
-			StanfordCharacterParser scp = new StanfordCharacterParser(
-					testString, Strictness.FIRSTLAST);
-
-			List<String> names = scp.getTokens();
-
-			for (String s : names) {
-				System.out.println(s + " is a name.");
-			}
-		}
-		
-		System.out.println("\nSTRICT Strictness: ");
-		{
-			StanfordCharacterParser scp = new StanfordCharacterParser(
-					testString, Strictness.STRICT);
-
-			List<String> names = scp.getTokens();
-
-			for (String s : names) {
-				System.out.println(s + " is a name.");
-			}
-		}
-	}
-	*/
 }
