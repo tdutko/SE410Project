@@ -1,5 +1,6 @@
 package storybook.ingest;
 
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -9,13 +10,19 @@ import java.util.List;
  * 
  * @author Travis Dutko
  */
-public interface Parser {
+public abstract class Parser {
 
+	protected InputStream is;
+	
+	protected Parser(InputStream in) {
+		is = in;
+	}
+	
 	/**
-	 * Parses the text passed in via the parser's constructor
+	 * Returns the list of relevant tokens to the caller. Parser class determines the token returned
 	 * 
 	 * @return the list of relevant tokens
 	 */
-	public List<String> getTokens();
+	public abstract List<String> getTokens();
 
 }

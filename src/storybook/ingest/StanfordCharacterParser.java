@@ -21,7 +21,7 @@ import edu.stanford.nlp.ling.CoreLabel;
  * 
  * @author Travis Dutko
  */
-public class StanfordCharacterParser implements Parser {
+public class StanfordCharacterParser extends Parser {
 
 	/**
 	 * MINIMAL: removes only word-for-word duplicates ("Lyra Belacqua" and
@@ -36,18 +36,17 @@ public class StanfordCharacterParser implements Parser {
 		MINIMAL, FIRSTLAST, STRICT
 	};
 
-	private InputStream is;
 	private Strictness strictness;
 
 	/**
-	 * Constructor. Takes the string which is to be parsed
+	 * Constructor. Takes the string which is to be parsed Default strictness of firstlast is used.
 	 * 
 	 * @param s
 	 *            the content string
 	 */
 	public StanfordCharacterParser(InputStream in) {
-		is = in;
-		strictness = Strictness.MINIMAL;
+		super(in);
+		strictness = Strictness.FIRSTLAST;
 	}
 
 	/**
@@ -58,7 +57,7 @@ public class StanfordCharacterParser implements Parser {
 	 * @param strict
 	 */
 	public StanfordCharacterParser(InputStream in, Strictness strict) {
-		is = in;
+		super(in);
 		strictness = strict;
 	}
 
@@ -72,8 +71,6 @@ public class StanfordCharacterParser implements Parser {
 		} catch (ClassCastException | ClassNotFoundException | IOException e) {
 			e.printStackTrace();
 		}
-
-		
 
 		// initialize the list of names to return
 		List<String> names = new ArrayList<String>();
@@ -163,7 +160,7 @@ public class StanfordCharacterParser implements Parser {
 	}
 
 	/**
-	 * Removes duplicates bassed on the strictness of the parser. MINIMAL:
+	 * Removes duplicates based on the strictness of the parser. MINIMAL:
 	 * removes only word-for-word duplicates
 	 * 
 	 * STRICT: removes all duplicate names, preserving longer names over shorter
