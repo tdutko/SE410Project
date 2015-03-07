@@ -329,6 +329,24 @@ public class SbApp extends Component {
 		}
 		return true;
 	}
+	
+	// Fetch the File
+	public boolean importCharacters()
+	{
+		trace("SbApp.importCharacters()");
+		File impFile = BookUtil.getImportCharsFileDialog();
+		if (impFile == null) {
+			return false;
+		}
+		return importCharacters(impFile);
+	}
+	
+	// TODO Process File
+	public boolean importCharacters(File impFile)
+	{
+		trace("SbApp.importCharacters("+impFile.getName()+")");
+		return true;
+	}
 
 	private boolean checkIfAlreadyOpened(String dbName) {
 		trace("SbApp.checkIfAlreadyOpened("+dbName+")");

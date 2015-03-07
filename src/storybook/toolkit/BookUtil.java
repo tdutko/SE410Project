@@ -182,6 +182,30 @@ public class BookUtil {
 		}
 		return null;
 	}
+	
+	// JFileChooser for import Files
+	public static File getImportCharsFileDialog(){
+		final JFileChooser fc = new JFileChooser();
+		Preference pref = PrefUtil.get(PreferenceKey.LAST_OPEN_DIR, getHomeDir());
+		fc.setCurrentDirectory(new File(pref.getStringValue()));
+		fc.setDialogTitle(I18N.getMsg("msg.common.import"));
+        fc.setApproveButtonText("Import");
+		
+		int ret = fc.showOpenDialog(null);
+		if (ret == JFileChooser.APPROVE_OPTION) {
+			File file = fc.getSelectedFile();
+			if (!file.exists()) {
+				JOptionPane.showMessageDialog(null,
+						I18N.getMsg("msg.dlg.project.not.exits.text", file),
+						I18N.getMsg("msg.dlg.project.not.exits.title"),
+						JOptionPane.ERROR_MESSAGE);
+				return null;
+			}
+			return file;
+		}
+		
+		return null;
+	}
 
 	public static String getHomeDir() {
 		return System.getProperty("user.home");

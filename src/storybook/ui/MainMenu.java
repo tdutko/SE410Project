@@ -11,6 +11,7 @@ import com.sun.jaf.ui.ActionManager;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+
 import javax.swing.Action;
 import javax.swing.JOptionPane;
 
@@ -121,6 +122,9 @@ public class MainMenu extends javax.swing.JFrame {
         fileRename = new javax.swing.JMenuItem();
         fileClose = new javax.swing.JMenuItem();
         separatorFile1 = new javax.swing.JPopupMenu.Separator();
+        
+        fileImportCharacters = new javax.swing.JMenuItem();
+        
         fileProperties = new javax.swing.JMenuItem();
         separatorFile2 = new javax.swing.JPopupMenu.Separator();
         fileExport = new javax.swing.JMenuItem();
@@ -622,6 +626,15 @@ public class MainMenu extends javax.swing.JFrame {
         });
         menuFile.add(fileClose);
         menuFile.add(separatorFile1);
+        
+        fileImportCharacters.setIcon(new javax.swing.ImageIcon(getClass().getResource("/storybook/resources/icons/16x16/import.png")));
+        fileImportCharacters.setText(bundle.getString("msg.file.import.characters"));
+        fileImportCharacters.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	fileImportCharactersFromFileActionPerformed(evt);
+    		}
+        });
+        menuFile.add(fileImportCharacters);
 
         fileProperties.setText(bundle.getString("msg.file.properties")); // NOI18N
         fileProperties.setActionCommand("document-preferences-command");
@@ -1500,6 +1513,13 @@ public class MainMenu extends javax.swing.JFrame {
     private void fileCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileCloseActionPerformed
         mainFrame.close();
     }//GEN-LAST:event_fileCloseActionPerformed
+    
+    private void fileImportCharactersFromFileActionPerformed(java.awt.event.ActionEvent evt)
+    {
+    	mainFrame.setWaitingCursor();
+    	SbApp.getInstance().importCharacters();
+    	mainFrame.setDefaultCursor();
+    }
 
     private void filePropertiesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filePropertiesActionPerformed
         BookPropertiesDialog dlg = new BookPropertiesDialog(mainFrame);
@@ -2062,6 +2082,9 @@ public class MainMenu extends javax.swing.JFrame {
     private javax.swing.JMenuItem fileOpen;
     public javax.swing.JMenu fileOpenRecent;
     private javax.swing.JMenuItem filePrint;
+    
+    private javax.swing.JMenuItem fileImportCharacters;
+    
     private javax.swing.JMenuItem fileProperties;
     private javax.swing.JMenuItem fileRename;
     private javax.swing.JMenuItem fileSave;
@@ -2191,7 +2214,7 @@ public class MainMenu extends javax.swing.JFrame {
 		}
 		javax.swing.JMenuItem[] submenus={
 			editCopyBlurb, editCopyBook,
-			fileClose, fileExport, filePrint,
+			fileClose, fileExport, filePrint, fileImportCharacters,
 			fileProperties, fileRename, fileSave, fileSaveAs
 		};
 		for (javax.swing.JMenuItem m : submenus) {
