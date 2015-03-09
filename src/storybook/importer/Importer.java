@@ -6,6 +6,7 @@ import org.hibernate.Session;
 
 import storybook.model.BookModel;
 import storybook.model.hbn.dao.PersonDAOImpl;
+import storybook.model.hbn.entity.Gender;
 import storybook.model.hbn.entity.Person;
 import storybook.ui.MainFrame;
 
@@ -30,6 +31,21 @@ public abstract class Importer {
 		return inputStream;
 	}
 	
+	protected Gender getGender(String g) {
+		Gender gender = null;
+		long genderId = 0L;
+
+		if (g.equalsIgnoreCase("male"))
+			genderId = 1L;
+		else if (g.equalsIgnoreCase("female"))
+			genderId = 2L;
+
+		Session session = mainFrame.getBookModel().getSession();
+		gender = (Gender) session.get(Gender.class, genderId);
+
+		return gender;
+	}
+
 	protected abstract Person[] extractPersons();
 	
 	public void importData() {
