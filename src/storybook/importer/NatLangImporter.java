@@ -1,25 +1,24 @@
 package storybook.importer;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import storybook.ingest.Ingestor;
 import storybook.ingest.StanfordCharacterParser;
 import storybook.model.hbn.entity.Person;
 import storybook.ui.MainFrame;
 
 public class NatLangImporter extends Importer {
 
-	public NatLangImporter(MainFrame mf, Ingestor i) {
-		super(mf, i);
+	public NatLangImporter(MainFrame mf, InputStream is) {
+		super(mf, is);
 	}
 
 	@Override
 	public Person[] extractPersons() {
 		List<Person> persons = new ArrayList<Person>();
 		
-		String text = ingestor.getContent();
-		StanfordCharacterParser parser = new StanfordCharacterParser(text);
+		StanfordCharacterParser parser = new StanfordCharacterParser(getInputStream());
 		
 		List<String> names = parser.getTokens();
 		

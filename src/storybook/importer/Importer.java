@@ -1,8 +1,9 @@
 package storybook.importer;
 
+import java.io.InputStream;
+
 import org.hibernate.Session;
 
-import storybook.ingest.Ingestor;
 import storybook.model.BookModel;
 import storybook.model.hbn.dao.PersonDAOImpl;
 import storybook.model.hbn.entity.Person;
@@ -11,16 +12,11 @@ import storybook.ui.MainFrame;
 public abstract class Importer {
 	
 	private MainFrame mainFrame;
-	protected Ingestor ingestor;
+	private InputStream inputStream;
 	
-	public Importer(MainFrame mf, Ingestor i) {
+	public Importer(MainFrame mf, InputStream is) {
 		mainFrame = mf;
-		ingestor = i;
-	}
-	
-	public void importData() {
-		Person[] persons = extractPersons();
-		importPersons(mainFrame.getBookModel(), persons);
+		inputStream = is;
 	}
 	
 	private void importPersons(BookModel model, Person[] persons) {
@@ -30,6 +26,15 @@ public abstract class Importer {
 		model.commit();
 	}
 	
+	protected InputStream getInputStream() {
+		return inputStream;
+	}
+	
 	protected abstract Person[] extractPersons();
+	
+	public void importData() {
+		Person[] persons = extractPersons();
+		importPersons(mainFrame.getBookModel(), persons);
+	}
 
 }
