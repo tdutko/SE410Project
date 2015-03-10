@@ -188,8 +188,8 @@ public class BookUtil {
 		final JFileChooser fc = new JFileChooser();
 		Preference pref = PrefUtil.get(PreferenceKey.LAST_OPEN_DIR, getHomeDir());
 		fc.setCurrentDirectory(new File(pref.getStringValue()));
-		fc.setDialogTitle(I18N.getMsg("msg.common.import"));
-        fc.setApproveButtonText("Import");
+		fc.setDialogTitle(I18N.getMsg("msg.file.import.characters"));
+        fc.setApproveButtonText(I18N.getMsg("msg.common.import"));
 		
 		int ret = fc.showOpenDialog(null);
 		if (ret == JFileChooser.APPROVE_OPTION) {
