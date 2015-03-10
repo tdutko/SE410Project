@@ -16,8 +16,6 @@ public class Genderer {
 		for (String name : names){
 			String firstName = name.split(" ")[0];
 			String gender = api.getGender(firstName).getGender();
-			if (gender == null)
-				gender = "Androgynous";
 			characterMap.put(name, gender);
 		}
 		
