@@ -96,14 +96,14 @@ public abstract class AbstractTable extends AbstractPanel implements ActionListe
 	//private JButton btImport;
 	private IconButton btOrderUp;
 	private IconButton btOrderDown;
-	private JFileChooser fileChooser;
+	//private JFileChooser fileChooser;
 
 	public AbstractTable(MainFrame mainFrame) {
 		this.mainFrame = mainFrame;
 		ctrl = mainFrame.getBookController();
-		fileChooser = new JFileChooser();
-		fileChooser.setApproveButtonText("Import");
-		fileChooser.setDialogTitle("Import");
+		//fileChooser = new JFileChooser();
+		//fileChooser.setApproveButtonText("Import");
+		//fileChooser.setDialogTitle("Import");
 	}
 
 	abstract protected AbstractEntity getNewEntity();

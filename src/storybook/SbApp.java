@@ -334,31 +334,26 @@ public class SbApp extends Component {
 		return true;
 	}
 	
-	// Fetch the File
-	public boolean importCharacters()
+	// Fetch and process file
+	public boolean importCharacters(MainFrame mf)
 	{
 		trace("SbApp.importCharacters()");
 		File impFile = BookUtil.getImportCharsFileDialog();
-		if (impFile == null) {
+		if (impFile != null) {
+			try{
+				FileInputStream fis = new FileInputStream(impFile);
+				Importer imp = new NatLangImporter(mf, fis);
+				imp.importData();
+				mf.refresh();
+				return true;
+			}
+			catch (Exception e){
+				trace(e.toString());
+				return false;
+			}
+		}
+		else
 			return false;
-		}
-		return importCharacters(impFile);
-	}
-	
-	// Process the File
-	public boolean importCharacters(File impFile)
-	{
-		trace("SbApp.importCharacters("+impFile.getName()+")");
-		try{
-			FileInputStream fis = new FileInputStream(impFile);
-			Importer imp = new NatLangImporter(mainFrames.get(0), fis);
-			imp.importData();
-		}
-		catch (Exception e){
-			trace(e.toString());
-		}
-		
-		return true;
 	}
 
 	private boolean checkIfAlreadyOpened(String dbName) {
