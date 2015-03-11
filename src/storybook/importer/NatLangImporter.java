@@ -29,8 +29,8 @@ public class NatLangImporter extends Importer {
 		for (String n : names) {
 			Person p = new Person();
 			
-			String firstName = n.split(" ")[0];
-			String lastName = n.substring(firstName.length()).trim();
+			String lastName = n.contains(" ") ? n.substring(n.lastIndexOf(" ") + 1, n.length()) : "";
+			String firstName = n.substring(0, n.length() - lastName.length()).trim();
 			String abbreviation = firstName.substring(0, firstName.length() >= 2 ? 2 : firstName.length())
 					+ lastName.substring(0, lastName.length() >= 2 ? 2 : lastName.length());
 			String g = genders.get(n);
