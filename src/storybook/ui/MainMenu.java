@@ -1517,7 +1517,7 @@ public class MainMenu extends javax.swing.JFrame {
     private void fileImportCharactersFromFileActionPerformed(java.awt.event.ActionEvent evt)
     {
     	mainFrame.setWaitingCursor();
-    	SbApp.getInstance().importCharacters();
+    	SbApp.getInstance().importCharacters(mainFrame);
     	mainFrame.setDefaultCursor();
     }
 
