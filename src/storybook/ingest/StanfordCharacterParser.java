@@ -300,14 +300,4 @@ public class StanfordCharacterParser extends Parser {
 		}
 		return false;
 	}
-	
-	private boolean hasAlready(List<String> names, String name){
-		for (String s : names){
-			if (s.equalsIgnoreCase(name))
-				return true;
-					
-		}
-		return false;
-	}
-	
 }
