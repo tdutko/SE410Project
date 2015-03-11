@@ -41,7 +41,9 @@ public abstract class Importer {
 			genderId = 2L;
 
 		Session session = mainFrame.getBookModel().getSession();
+		session.beginTransaction();
 		gender = (Gender) session.get(Gender.class, genderId);
+		session.getTransaction().commit();
 
 		return gender;
 	}
