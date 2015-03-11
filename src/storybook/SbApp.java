@@ -25,6 +25,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.lang.reflect.InvocationTargetException;
@@ -43,6 +44,8 @@ import javax.swing.Timer;
 import javax.swing.plaf.FontUIResource;
 
 import org.apache.commons.io.FileUtils;
+
+import com.itextpdf.text.pdf.codec.Base64.InputStream;
 
 import storybook.SbConstants.BookKey;
 import storybook.SbConstants.PreferenceKey;
@@ -64,6 +67,7 @@ import storybook.ui.dialog.FirstStartDialog;
 import storybook.ui.dialog.PostModelUpdateDialog;
 import storybook.ui.dialog.SplashDialog;
 import storybook.ui.dialog.file.NewFileDialog;
+import storybook.importer.*;
 
 public class SbApp extends Component {
 	private static boolean bTrace=false;
@@ -327,6 +331,33 @@ public class SbApp extends Component {
 			});
 		} catch (HeadlessException e) {
 		}
+		return true;
+	}
+	
+	// Fetch the File
+	public boolean importCharacters()
+	{
+		trace("SbApp.importCharacters()");
+		File impFile = BookUtil.getImportCharsFileDialog();
+		if (impFile == null) {
+			return false;
+		}
+		return importCharacters(impFile);
+	}
+	
+	// Process the File
+	public boolean importCharacters(File impFile)
+	{
+		trace("SbApp.importCharacters("+impFile.getName()+")");
+		try{
+			FileInputStream fis = new FileInputStream(impFile);
+			Importer imp = new NatLangImporter(mainFrames.get(0), fis);
+			imp.importData();
+		}
+		catch (Exception e){
+			trace(e.toString());
+		}
+		
 		return true;
 	}
 

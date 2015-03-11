@@ -110,6 +110,7 @@
 	<classpathentry kind="lib" path="lib/jung/jung-io-2.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/jung/jung-jai-2.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/jung/jung-jai-samples-2.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/jung/jung-visualization-2.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/stanford-ner.jar"/>
 	<classpathentry kind="lib" path="lib/aopalliance-repackaged-2.4.0-b06.jar"/>
 	<classpathentry kind="lib" path="lib/hamcrest-core-1.1.jar"/>
