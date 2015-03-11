@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import org.apache.commons.lang.WordUtils;
+
 import edu.stanford.nlp.ie.AbstractSequenceClassifier;
 import edu.stanford.nlp.ie.crf.CRFClassifier;
 import edu.stanford.nlp.ling.CoreAnnotations;
@@ -157,7 +159,16 @@ public class StanfordCharacterParser extends Parser {
 		}
 		
 		scanner.close();
-		return removeDuplicates(names);
+		
+		//maybe
+		List<String> culled = removeDuplicates(names);
+		List<String> finalList = new ArrayList<String>();
+		for (String s : culled){
+			finalList.add(WordUtils.capitalize(s));
+		}
+		//finish this
+		
+		return finalList;
 	}
 
 	/**
