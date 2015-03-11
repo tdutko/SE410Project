@@ -20,6 +20,7 @@ public abstract class Importer {
 		inputStream = is;
 	}
 	
+	// Formally inserts given persons into the given book model.
 	private void importPersons(BookModel model, Person[] persons) {
 		Session session = model.beginTransaction();
 		PersonDAOImpl personDAO = new PersonDAOImpl(session);
@@ -27,10 +28,8 @@ public abstract class Importer {
 		model.commit();
 	}
 	
-	protected InputStream getInputStream() {
-		return inputStream;
-	}
-	
+	// @param g : String of gender to convert to Gender object ("male" or "female")
+	// @return Male or Female Gender object, or null if neither
 	protected Gender getGender(String g) {
 		Gender gender = null;
 		long genderId = 0L;
@@ -52,12 +51,22 @@ public abstract class Importer {
 
 		return gender;
 	}
+	
+	// getter for ivar inputStream
+	protected InputStream getInputStream() {
+		return inputStream;
+	}
 
+	// @return an array of Person model objects extracted from the InputStream
 	protected abstract Person[] extractPersons();
 	
+	// Extracts and imports relevant plot objects into the current BookModel.
 	public void importData() {
 		Person[] persons = extractPersons();
 		importPersons(mainFrame.getBookModel(), persons);
+		
+		// More extracts/imports can be added here, 
+		// e.g. extractLocations() with importLocations()...
 	}
 
 }

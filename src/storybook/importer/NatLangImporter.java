@@ -17,6 +17,8 @@ public class NatLangImporter extends Importer {
 		super(mf, is);
 	}
 
+	// Extracts Persons from InputStream through natural language processing, 
+	// extracting and setting first name, last name, abbreviation, and gender if available.
 	@Override
 	public Person[] extractPersons() {
 		List<Person> persons = new ArrayList<Person>();
