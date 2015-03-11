@@ -30,7 +30,7 @@ public abstract class Importer {
 	
 	// @param g : String of gender to convert to Gender object ("male" or "female")
 	// @return Male or Female Gender object, or null if neither
-	protected Gender getGender(String g) {
+	public Gender getGender(String g) {
 		Gender gender = null;
 		long genderId = 0L;
 		
@@ -53,7 +53,7 @@ public abstract class Importer {
 	}
 	
 	// getter for ivar inputStream
-	protected InputStream getInputStream() {
+	public InputStream getInputStream() {
 		return inputStream;
 	}
 

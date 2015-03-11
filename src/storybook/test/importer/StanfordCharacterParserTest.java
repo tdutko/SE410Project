@@ -46,9 +46,8 @@ public class StanfordCharacterParserTest {
 	public void testStanfordCharacterParser_2()
 		throws Exception {
 		InputStream in = new ByteArrayInputStream("".getBytes());
-		StanfordCharacterParser.Strictness strict = StanfordCharacterParser.Strictness.FIRSTLAST;
 
-		StanfordCharacterParser result = new StanfordCharacterParser(in, strict);
+		StanfordCharacterParser result = new StanfordCharacterParser(in);
 
 		// add additional test code here
 		assertNotNull(result);
@@ -64,7 +63,7 @@ public class StanfordCharacterParserTest {
 	@Test
 	public void testGetTokens_1()
 		throws Exception {
-		StanfordCharacterParser fixture = new StanfordCharacterParser(new ByteArrayInputStream("".getBytes()), StanfordCharacterParser.Strictness.FIRSTLAST);
+		StanfordCharacterParser fixture = new StanfordCharacterParser(new ByteArrayInputStream("".getBytes()));
 		fixture.is = new ByteArrayInputStream("".getBytes());
 
 		List<String> result = fixture.getTokens();
@@ -87,7 +86,7 @@ public class StanfordCharacterParserTest {
 	@Test
 	public void testGetTokens_2()
 		throws Exception {
-		StanfordCharacterParser fixture = new StanfordCharacterParser(new ByteArrayInputStream("".getBytes()), StanfordCharacterParser.Strictness.FIRSTLAST);
+		StanfordCharacterParser fixture = new StanfordCharacterParser(new ByteArrayInputStream("".getBytes()));
 		fixture.is = new ByteArrayInputStream("".getBytes());
 
 		List<String> result = fixture.getTokens();
@@ -110,7 +109,7 @@ public class StanfordCharacterParserTest {
 	@Test
 	public void testGetTokens_3()
 		throws Exception {
-		StanfordCharacterParser fixture = new StanfordCharacterParser(new ByteArrayInputStream("".getBytes()), StanfordCharacterParser.Strictness.FIRSTLAST);
+		StanfordCharacterParser fixture = new StanfordCharacterParser(new ByteArrayInputStream("".getBytes()));
 		fixture.is = new ByteArrayInputStream("".getBytes());
 
 		List<String> result = fixture.getTokens();
@@ -133,7 +132,7 @@ public class StanfordCharacterParserTest {
 	@Test
 	public void testGetTokens_4()
 		throws Exception {
-		StanfordCharacterParser fixture = new StanfordCharacterParser(new ByteArrayInputStream("".getBytes()), StanfordCharacterParser.Strictness.FIRSTLAST);
+		StanfordCharacterParser fixture = new StanfordCharacterParser(new ByteArrayInputStream("".getBytes()));
 		fixture.is = new ByteArrayInputStream("".getBytes());
 
 		List<String> result = fixture.getTokens();
@@ -156,7 +155,7 @@ public class StanfordCharacterParserTest {
 	@Test
 	public void testGetTokens_5()
 		throws Exception {
-		StanfordCharacterParser fixture = new StanfordCharacterParser(new ByteArrayInputStream("".getBytes()), StanfordCharacterParser.Strictness.FIRSTLAST);
+		StanfordCharacterParser fixture = new StanfordCharacterParser(new ByteArrayInputStream("".getBytes()));
 		fixture.is = new ByteArrayInputStream("".getBytes());
 
 		List<String> result = fixture.getTokens();
@@ -179,7 +178,7 @@ public class StanfordCharacterParserTest {
 	@Test
 	public void testGetTokens_6()
 		throws Exception {
-		StanfordCharacterParser fixture = new StanfordCharacterParser(new ByteArrayInputStream("".getBytes()), StanfordCharacterParser.Strictness.FIRSTLAST);
+		StanfordCharacterParser fixture = new StanfordCharacterParser(new ByteArrayInputStream("".getBytes()));
 		fixture.is = new ByteArrayInputStream("".getBytes());
 
 		List<String> result = fixture.getTokens();
@@ -202,7 +201,7 @@ public class StanfordCharacterParserTest {
 	@Test
 	public void testGetTokens_7()
 		throws Exception {
-		StanfordCharacterParser fixture = new StanfordCharacterParser(new ByteArrayInputStream("".getBytes()), StanfordCharacterParser.Strictness.FIRSTLAST);
+		StanfordCharacterParser fixture = new StanfordCharacterParser(new ByteArrayInputStream("".getBytes()));
 		fixture.is = new ByteArrayInputStream("".getBytes());
 
 		List<String> result = fixture.getTokens();
@@ -225,7 +224,7 @@ public class StanfordCharacterParserTest {
 	@Test
 	public void testGetTokens_8()
 		throws Exception {
-		StanfordCharacterParser fixture = new StanfordCharacterParser(new ByteArrayInputStream("".getBytes()), StanfordCharacterParser.Strictness.FIRSTLAST);
+		StanfordCharacterParser fixture = new StanfordCharacterParser(new ByteArrayInputStream("".getBytes()));
 		fixture.is = new ByteArrayInputStream("".getBytes());
 
 		List<String> result = fixture.getTokens();

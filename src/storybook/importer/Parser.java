@@ -12,7 +12,7 @@ import java.util.List;
  */
 public abstract class Parser {
 
-	protected InputStream is;
+	public InputStream is;
 	
 	protected Parser(InputStream in) {
 		is = in;

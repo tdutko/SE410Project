@@ -26,21 +26,6 @@ import edu.stanford.nlp.ling.CoreLabel;
 public class StanfordCharacterParser extends Parser {
 
 	/**
-	 * MINIMAL: removes only word-for-word duplicates ("Lyra Belacqua" and
-	 * "Lyra" are considered different names) FIRSTLAST: removes duplicates of
-	 * known first and last names only (given the name "Ludger Will Kresnik",
-	 * "Ludger" on its own would be removed, but "Will" on its own would not)
-	 * STRICT: removes all duplicates spotted, keeping the longest names
-	 * 
-	 * @author Travis Dutko
-	 */
-	public enum Strictness {
-		MINIMAL, FIRSTLAST, STRICT
-	};
-
-	private Strictness strictness;
-
-	/**
 	 * Constructor. Takes the string which is to be parsed Default strictness of firstlast is used.
 	 * 
 	 * @param s
@@ -48,19 +33,6 @@ public class StanfordCharacterParser extends Parser {
 	 */
 	public StanfordCharacterParser(InputStream in) {
 		super(in);
-		strictness = Strictness.STRICT;
-	}
-
-	/**
-	 * Constructor. Takes the string which is to be parsed and a Strictness
-	 * parameter
-	 * 
-	 * @param s
-	 * @param strict
-	 */
-	public StanfordCharacterParser(InputStream in, Strictness strict) {
-		super(in);
-		strictness = strict;
 	}
 
 	public List<String> getTokens() { 
@@ -160,13 +132,20 @@ public class StanfordCharacterParser extends Parser {
 		
 		scanner.close();
 		
-		//maybe
+		for (String s: names){
+			System.out.println("PreRemoval: "+s);
+		}
+		
 		List<String> culled = removeDuplicates(names);
+		for (String s: culled){
+			System.out.println("PostRemova: "+s);
+		}
+		
 		List<String> finalList = new ArrayList<String>();
 		for (String s : culled){
 			finalList.add(WordUtils.capitalize(s));
 		}
-		//finish this
+		
 		
 		return finalList;
 	}
@@ -186,76 +165,42 @@ public class StanfordCharacterParser extends Parser {
 		Map<Integer,List<String>> strictMap = null;
 		Integer highest = null;
 		
-		if (strictness != Strictness.MINIMAL) {
-			strictMap = new HashMap<Integer, List<String>>();
-			highest = 0;
-		}
-		
+		strictMap = new HashMap<Integer, List<String>>();
+		highest = 0;
+
 		// loop through all found names
 		for (String name : names) {
 			name = name.toLowerCase();
 			// if it doesn't contain the name, move onto the next step
 			if (!culledList.contains(name)) {
-
-				// if the strictness is minimal, just add it to the list
-				if (strictness == Strictness.MINIMAL) {
-					culledList.add(name);
-
-				} else {
-					String[] parts = name.split(" ");
-					int n = parts.length;
-					if (strictMap.containsKey(n)){
-						if (!strictMap.get(n).contains(name)){
-							strictMap.get(n).add(name);
-						}
-					} else {
-						strictMap.put(n, new ArrayList<String>());
+				String[] parts = name.split(" ");
+				int n = parts.length;
+				if (strictMap.containsKey(n)) {
+					if (!strictMap.get(n).contains(name)) {
 						strictMap.get(n).add(name);
-						
-						if (n > highest){
-							highest = n;
-						}
+					}
+				} else {
+					strictMap.put(n, new ArrayList<String>());
+					strictMap.get(n).add(name);
+
+					if (n > highest) {
+						highest = n;
 					}
 				}
 			}
 		}
 		
-		if (strictness == Strictness.MINIMAL) {
-			return culledList;
-
-		} else if (strictness == Strictness.FIRSTLAST) {
-
-			for(int key : strictMap.keySet()){
-				if (key != 1){
-					for (String name : strictMap.get(key)){
+		//go through the map and remove exact duplicates and add them to the list. 
+		for (int n = highest; n > 0; n--) {
+			if (strictMap.containsKey(n)) {
+				for (String name : strictMap.get(n)) {
+					if (!alreadyPresent(culledList, name)) {
 						culledList.add(name);
 					}
 				}
 			}
-			if (strictMap.containsKey(1)) {
-				for (String singleName : strictMap.get(1)) {
-					if (!alreadyPresent(culledList, singleName)) {
-						culledList.add(singleName);
-					}
-				}
-			}
-			return culledList;
-		} else if (strictness == Strictness.STRICT) {
-			for (int n = highest; n > 1; n--) {
-				if (strictMap.containsKey(n)) {
-					for (String name : strictMap.get(n)) {
-						if (!alreadyPresent(culledList, name)) {
-							culledList.add(name);
-						}
-					}
-				}
-			}
-			return culledList;
-		} else {
-			System.out.println("Unreachable code Exception! Parsing failed...");
-			return null;
 		}
-
+		return culledList;
 	}
 	
 	private boolean containsLetters(String s){
@@ -276,37 +221,33 @@ public class StanfordCharacterParser extends Parser {
 	 */
 	private boolean alreadyPresent(List<String> names, String testName) {
 
-		//if the list passed in is empty, return false
+		// if the list passed in is empty, return false
 		if (names.size() == 0)
 			return false;
 
-		//if we're doing firstlast, just compare single names with the first/last names
-		if (strictness == Strictness.FIRSTLAST) {
-			for (String fullName : names) {
-				String[] parts = fullName.split(" ");
-				if (parts.length > 1) {
-					if (parts[0].equalsIgnoreCase(testName) || parts[parts.length-1].equalsIgnoreCase(testName)) {
+		for (String fullName : names) {
+			String[] savedParts = fullName.split(" ");
+			String[] newParts = testName.split(" ");
+			int savedSize = savedParts.length;
+			int newSize = newParts.length;
+
+			if (newSize == 1) {
+				for (int i = 0; i < savedSize; i++) {
+					if (savedParts[i].equalsIgnoreCase(testName))
 						return true;
-					}
-				} else {
-					if (fullName.equalsIgnoreCase(testName)) {
-						return true;
-					}
 				}
-			}
-			
-		//otherwise, we need to compare multiple name segments against one another
-		} else if (strictness == Strictness.STRICT) {
-			for (String fullName : names){
-				String[] savedParts = fullName.split(" ");
-				String[] newParts = testName.split(" ");
-				int savedSize = savedParts.length;
-				int newSize = newParts.length;
-				//break up the names into pieces and compare them in sets of newSize. If all match, return true.
-				for (int i = 0; i<savedSize-newSize; i++){
+			} else if (newSize == savedSize) {
+				if (fullName.equalsIgnoreCase(testName))
+					return true;
+
+			} else {
+				// break up the names into pieces and compare them in sets
+				// of newSize. If all match, return true.
+				for (int i = 0; i < savedSize - newSize; i++) {
 					boolean matched = true;
-					for(int j = 0; j<newSize; j++){
-						if (!(savedParts[i+j].equalsIgnoreCase(newParts[j]))){
+					for (int j = 0; j < newSize; j++) {
+
+						if (!(savedParts[i + j].equalsIgnoreCase(newParts[j]))) {
 							matched = false;
 							break;
 						}
@@ -315,9 +256,8 @@ public class StanfordCharacterParser extends Parser {
 						return true;
 					}
 				}
-				
 			}
-			return false;
+
 		}
 		return false;
 	}
