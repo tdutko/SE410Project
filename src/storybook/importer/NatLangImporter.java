@@ -31,11 +31,14 @@ public class NatLangImporter extends Importer {
 			
 			String firstName = n.split(" ")[0];
 			String lastName = n.substring(firstName.length()).trim();
+			String abbreviation = firstName.substring(0, firstName.length() >= 2 ? 2 : firstName.length())
+					+ lastName.substring(0, lastName.length() >= 2 ? 2 : lastName.length());
 			String g = genders.get(n);
 			Gender gender = getGender(g);
 			
 			p.setFirstname(firstName);
 			p.setLastname(lastName);
+			p.setAbbreviation(abbreviation);
 			if (gender != null)
 				p.setGender(gender);
 			
