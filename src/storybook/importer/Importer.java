@@ -34,11 +34,16 @@ public abstract class Importer {
 	protected Gender getGender(String g) {
 		Gender gender = null;
 		long genderId = 0L;
+		
+		if (g == null)
+			return null;
 
 		if (g.equalsIgnoreCase("male"))
 			genderId = 1L;
 		else if (g.equalsIgnoreCase("female"))
 			genderId = 2L;
+		else
+			return null;
 
 		Session session = mainFrame.getBookModel().getSession();
 		session.beginTransaction();

@@ -36,7 +36,8 @@ public class NatLangImporter extends Importer {
 			
 			p.setFirstname(firstName);
 			p.setLastname(lastName);
-			p.setGender(gender);
+			if (gender != null)
+				p.setGender(gender);
 			
 			persons.add(p);
 		}
