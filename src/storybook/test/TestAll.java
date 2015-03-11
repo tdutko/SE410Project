@@ -16,7 +16,6 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
 	storybook.test.importer.TestAll.class,
-	storybook.test.ingest.TestAll.class,
 })
 public class TestAll {
 

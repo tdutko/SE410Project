@@ -1,4 +1,4 @@
-package storybook.test.ingest;
+package storybook.test.importer;
 
 import org.junit.*;
 import static org.junit.Assert.*;

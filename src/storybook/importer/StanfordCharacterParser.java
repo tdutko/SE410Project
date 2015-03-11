@@ -1,4 +1,4 @@
-package storybook.ingest;
+package storybook.importer;
 
 import java.io.IOException;
 import java.io.InputStream;

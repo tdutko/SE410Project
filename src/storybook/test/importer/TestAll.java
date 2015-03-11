@@ -17,6 +17,9 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
 	NatLangImporterTest.class,
 	ImporterTest.class,
+	StanfordCharacterParserTest.class,
+	GendererTest.class,
+	ParserTest.class,
 })
 public class TestAll {
 

@@ -1,4 +1,4 @@
-package storybook.ingest;
+package storybook.importer;
 
 import java.io.InputStream;
 import java.util.List;

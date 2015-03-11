@@ -1,4 +1,4 @@
-package storybook.test.ingest;
+package storybook.test.importer;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.junit.*;
 
-import storybook.ingest.StanfordCharacterParser;
+import storybook.importer.StanfordCharacterParser;
 import static org.junit.Assert.*;
 
 /**

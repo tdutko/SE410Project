@@ -1,4 +1,4 @@
-package storybook.test.ingest;
+package storybook.test.importer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.junit.*;
 
-import storybook.ingest.Genderer;
+import storybook.importer.Genderer;
 import static org.junit.Assert.*;
 
 /**

@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import storybook.ingest.Genderer;
-import storybook.ingest.StanfordCharacterParser;
 import storybook.model.hbn.entity.Gender;
 import storybook.model.hbn.entity.Person;
 import storybook.ui.MainFrame;
