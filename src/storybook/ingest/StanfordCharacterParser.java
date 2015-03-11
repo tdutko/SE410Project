@@ -95,7 +95,7 @@ public class StanfordCharacterParser extends Parser {
 
 					// if it is tagged as "PERSON"...
 					if (word.getString(CoreAnnotations.AnswerAnnotation.class)
-							.equals("PERSON")) {
+							.equals("PERSON") && containsLetters(word.word())) {
 
 						// check to see the coordinate of the previously found
 						// name
@@ -154,7 +154,8 @@ public class StanfordCharacterParser extends Parser {
 				nextLine = scanner.nextLine();
 			else 
 				break;
-		}		
+		}
+		
 		scanner.close();
 		return removeDuplicates(names);
 	}
@@ -245,6 +246,15 @@ public class StanfordCharacterParser extends Parser {
 		}
 
 	}
+	
+	private boolean containsLetters(String s){
+		for (char c: s.toCharArray()){
+			if (Character.isLetter(c)){
+				return true;
+			}
+		}
+		return false;
+	}
 
 	/**
 	 * Determines if a name is present
@@ -281,7 +291,6 @@ public class StanfordCharacterParser extends Parser {
 				String[] newParts = testName.split(" ");
 				int savedSize = savedParts.length;
 				int newSize = newParts.length;
-				
 				//break up the names into pieces and compare them in sets of newSize. If all match, return true.
 				for (int i = 0; i<savedSize-newSize; i++){
 					boolean matched = true;
@@ -291,8 +300,9 @@ public class StanfordCharacterParser extends Parser {
 							break;
 						}
 					}
-					if (matched)
+					if (matched) {
 						return true;
+					}
 				}
 				
 			}
