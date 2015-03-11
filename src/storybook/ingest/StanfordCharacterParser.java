@@ -46,7 +46,7 @@ public class StanfordCharacterParser extends Parser {
 	 */
 	public StanfordCharacterParser(InputStream in) {
 		super(in);
-		strictness = Strictness.FIRSTLAST;
+		strictness = Strictness.STRICT;
 	}
 
 	/**
@@ -181,7 +181,7 @@ public class StanfordCharacterParser extends Parser {
 		
 		// loop through all found names
 		for (String name : names) {
-
+			name = name.toLowerCase();
 			// if it doesn't contain the name, move onto the next step
 			if (!culledList.contains(name)) {
 
@@ -264,11 +264,11 @@ public class StanfordCharacterParser extends Parser {
 			for (String fullName : names) {
 				String[] parts = fullName.split(" ");
 				if (parts.length > 1) {
-					if (parts[0].equals(testName) || parts[parts.length-1].equals(testName)) {
+					if (parts[0].equalsIgnoreCase(testName) || parts[parts.length-1].equalsIgnoreCase(testName)) {
 						return true;
 					}
 				} else {
-					if (fullName.equals(testName)) {
+					if (fullName.equalsIgnoreCase(testName)) {
 						return true;
 					}
 				}
@@ -286,7 +286,7 @@ public class StanfordCharacterParser extends Parser {
 				for (int i = 0; i<savedSize-newSize; i++){
 					boolean matched = true;
 					for(int j = 0; j<newSize; j++){
-						if (!(savedParts[i+j].equals(newParts[j]))){
+						if (!(savedParts[i+j].equalsIgnoreCase(newParts[j]))){
 							matched = false;
 							break;
 						}
@@ -298,8 +298,16 @@ public class StanfordCharacterParser extends Parser {
 			}
 			return false;
 		}
-		
-
 		return false;
 	}
+	
+	private boolean hasAlready(List<String> names, String name){
+		for (String s : names){
+			if (s.equalsIgnoreCase(name))
+				return true;
+					
+		}
+		return false;
+	}
+	
 }
